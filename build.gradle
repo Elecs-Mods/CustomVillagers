@@ -26,14 +26,14 @@ configFile.withReader {
 }
 
 version = "${config.minecraft_version}-${config.mod_version}." + (System.env.DRONE_BUILD_NUMBER ?: "localBuild")
-group= "elec332.tweaks" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
-archivesBaseName = "ElecTweaks"
+group= "elec332.customvillagers" // http://maven.apache.org/guides/mini/guide-naming-conventions.html
+archivesBaseName = "CustomVillagers"
 
 minecraft {
     version = config.minecraft_version + "-" + config.forge_version
     runDir = "eclipse"
 	
-	replaceIn "main/ElecTweaks.java"
+	replaceIn "main/CustomVillagerModContainer.java"
     replace "#ELECCORE_VER#", config.eleccore_version
 }
 

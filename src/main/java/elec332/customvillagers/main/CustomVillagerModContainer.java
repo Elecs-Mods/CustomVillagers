@@ -24,13 +24,13 @@ public class CustomVillagerModContainer extends ModBase{
 	@SidedProxy(clientSide = "elec332.customvillagers.proxies.ClientProxy", serverSide = "elec332.customvillagers.proxies.CommonProxy")
 	public static CommonProxy proxy;
 
-	@Mod.Instance("customvillagers")
+	@Mod.Instance("CustomVillagers")
 	public static CustomVillagerModContainer instance;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		this.modID = ModInfoHelper.getModID(event);
-		this.cfg = FileHelper.getConfigFileElec(event);
+		this.cfg = FileHelper.getCustomConfigFileElec(event, ModInfoHelper.getModname(event), ModInfoHelper.getModname(event));
 		loadConfiguration();
 		CustomVillager.preInit(event);
 

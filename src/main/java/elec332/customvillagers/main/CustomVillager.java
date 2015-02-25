@@ -4,6 +4,7 @@ import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
 import elec332.core.helper.FileHelper;
+import elec332.core.helper.ModInfoHelper;
 import elec332.customvillagers.Data;
 import elec332.customvillagers.DebugItem;
 import elec332.customvillagers.VillagerTransformer;
@@ -14,7 +15,6 @@ import net.minecraftforge.common.config.Configuration;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Created by Elec332 on 12-2-2015.
@@ -29,7 +29,7 @@ public class CustomVillager {
     public static boolean hasInit = false;
 
     public static void preInit(FMLPreInitializationEvent event) {
-        baseFile = new File(event.getModConfigurationDirectory(), "CustomVillagers");
+        baseFile = FileHelper.getCustomConfigFolderElec(event, ModInfoHelper.getModname(event));
         new File(baseFile, "textures").mkdirs();
         main.load();
         VillageCFGNames = main.getStringList("Filenames", Configuration.CATEGORY_GENERAL, new String[]{"custom1.cfg", "custom2.cfg"}, "Insert the names for CFG files here");

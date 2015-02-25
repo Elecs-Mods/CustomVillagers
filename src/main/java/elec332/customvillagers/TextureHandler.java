@@ -1,5 +1,6 @@
 package elec332.customvillagers;
 
+import elec332.customvillagers.main.CustomVillagerModContainer;
 import net.minecraft.client.resources.IResourcePack;
 import net.minecraft.client.resources.data.IMetadataSection;
 import net.minecraft.client.resources.data.IMetadataSerializer;
@@ -18,7 +19,7 @@ import java.util.Set;
  */
 public class TextureHandler implements IResourcePack {
 
-    String path = "config/Elec's mods/Villagers";
+    String path = "config/Elec's mods/"+ CustomVillagerModContainer.instance.modID();
 
     @Override
     public InputStream getInputStream(ResourceLocation rl) throws IOException {

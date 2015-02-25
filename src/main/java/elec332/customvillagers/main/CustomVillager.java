@@ -29,7 +29,7 @@ public class CustomVillager {
     public static boolean hasInit = false;
 
     public static void preInit(FMLPreInitializationEvent event) {
-        baseFile = FileHelper.getCustomConfigFolderElec(event, ModInfoHelper.getModname(event));
+        baseFile = FileHelper.getCustomConfigFolderElec(event, ModInfoHelper.getModID(event));
         new File(baseFile, "textures").mkdirs();
         main.load();
         VillageCFGNames = main.getStringList("Filenames", Configuration.CATEGORY_GENERAL, new String[]{"custom1.cfg", "custom2.cfg"}, "Insert the names for CFG files here");

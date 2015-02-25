@@ -30,7 +30,7 @@ public class CustomVillagerModContainer extends ModBase{
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event) {
 		this.modID = ModInfoHelper.getModID(event);
-		this.cfg = FileHelper.getCustomConfigFileElec(event, ModInfoHelper.getModname(event), ModInfoHelper.getModname(event));
+		this.cfg = FileHelper.getCustomConfigFileElec(event, ModInfoHelper.getModID(event), ModInfoHelper.getModID(event));
 		loadConfiguration();
 		CustomVillager.preInit(event);
 

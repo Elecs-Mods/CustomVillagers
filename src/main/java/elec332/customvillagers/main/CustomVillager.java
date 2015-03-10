@@ -9,6 +9,7 @@ import elec332.customvillagers.Data;
 import elec332.customvillagers.DebugItem;
 import elec332.customvillagers.VillagerTransformer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraftforge.common.config.Configuration;
 
@@ -25,8 +26,8 @@ public class CustomVillager {
     public static Configuration main = CustomVillagerModContainer.instance.config;
     public static String [] VillageCFGNames;
     public static HashMap<String, Configuration> registry = new HashMap<String, Configuration>();
-    public static HashMap<Integer, String> villagerIDs = new HashMap<Integer, String>();
     public static boolean hasInit = false;
+    public static ResourceLocation defaultVillagerTexture = new ResourceLocation(CustomVillagerModContainer.instance.modID(), "default.png");
 
     public static void preInit(FMLPreInitializationEvent event) {
         baseFile = FileHelper.getCustomConfigFolderElec(event, ModInfoHelper.getModID(event));
@@ -75,19 +76,21 @@ public class CustomVillager {
                     trades.add(new MerchantRecipe(Item1, Item2, Item3));
                 }
                 configuration.save();
-                if (png.contains(".png")) {
-                    Data.textureData.put(ID, png);
-                } else {
-                    CustomVillagerModContainer.instance.error(png + " is not a valid filename, the file-extension must be .png!");
-                    CustomVillagerModContainer.instance.error("Using default texture for villager ID " + ID);
-                    Data.textureData.put(ID, "default.png");
-                }
+                Data.registerTexture(png, ID);
                 Data.tradeData.put(ID, trades);
                 Data.spawnData.add(new VillagerTransformer(toreplace, ID, chance));
             }
             Data.registerVillagers();
             hasInit = true;
             //MinecraftForge.EVENT_BUS.register(new CustomVillager());
+            /*main.load();
+            String protection = main.getString("Villager protection", Configuration.CATEGORY_GENERAL, "no", "Sets if you wanna protect villager from getting attacked, accepted values: no, all, some");
+            int[] toProtect = main.get(Configuration.CATEGORY_GENERAL, "ID's to protect", new int[]{0, 1, 2, 3, 4, 5}, "If you set \"Villager Protection\" to \" some\", then define here wich villager ID's you want to protect").getIntList();
+            if (protection.equalsIgnoreCase("all"))
+                MinecraftForge.EVENT_BUS.register(new VillagerProtectionHandler(true, null));
+            if (protection.equalsIgnoreCase("some")){
+
+            }*/
         }
     }
 }

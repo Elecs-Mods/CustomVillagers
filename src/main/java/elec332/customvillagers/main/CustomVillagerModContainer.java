@@ -1,5 +1,6 @@
 package elec332.customvillagers.main;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
@@ -12,7 +13,9 @@ import elec332.core.helper.MCModInfo;
 import elec332.core.helper.ModInfoHelper;
 import elec332.core.modBaseUtils.ModBase;
 import elec332.core.modBaseUtils.modInfo;
+import elec332.customvillagers.minetweaker.CustomVillagers;
 import elec332.customvillagers.proxies.CommonProxy;
+import minetweaker.MineTweakerAPI;
 
 import java.io.File;
 
@@ -33,7 +36,8 @@ public class CustomVillagerModContainer extends ModBase{
 		this.cfg = FileHelper.getCustomConfigFileElec(event, ModInfoHelper.getModID(event), ModInfoHelper.getModID(event));
 		loadConfiguration();
 		CustomVillager.preInit(event);
-
+		if (Loader.isModLoaded("MineTweaker3"))
+			MineTweakerAPI.registerClass(CustomVillagers.class);
 
 		MCModInfo.CreateMCModInfo(event, "Created by Elec332",
 				"This mod allows you to create custom villagers with config files",

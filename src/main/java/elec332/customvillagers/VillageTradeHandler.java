@@ -25,7 +25,7 @@ public class VillageTradeHandler implements VillagerRegistry.IVillageTradeHandle
     @Override
     public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {
         if (villager.getProfession() == ID) {
-            recipeList.clear();
+            //recipeList.clear();
             for (MerchantRecipe r : trades) {
                 recipeList.addToListWithCheck(r);
             }

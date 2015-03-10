@@ -1,5 +1,7 @@
 package elec332.customvillagers.proxies;
 
+import net.minecraft.util.ResourceLocation;
+
 import java.util.HashMap;
 
 /**
@@ -10,6 +12,6 @@ public class CommonProxy{
     public void registerResourcePacks(){
     }
 
-    public void registerVillagerSkins(HashMap<Integer, String> data){
+    public void registerVillagerSkins(int i, ResourceLocation resourceLocation) {
     }
 }

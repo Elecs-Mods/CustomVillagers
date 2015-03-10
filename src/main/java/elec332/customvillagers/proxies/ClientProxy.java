@@ -28,9 +28,9 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void registerVillagerSkins(HashMap<Integer, String> data) {
-        for (int i : data.keySet()) {
-            VillagerRegistry.instance().registerVillagerSkin(i, new ResourceLocation("textures", data.get(i)));
-        }
+    public void registerVillagerSkins(int i, ResourceLocation resourceLocation) {
+        //for (int i : data.keySet()) {
+            VillagerRegistry.instance().registerVillagerSkin(i, resourceLocation);//new ResourceLocation("textures", data.get(i)));
+        //}
     }
 }

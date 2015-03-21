@@ -1,5 +1,6 @@
 package elec332.customvillagers.main;
 
+import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
 import cpw.mods.fml.common.registry.GameRegistry;
@@ -27,6 +28,7 @@ public class CustomVillager {
     public static String [] VillageCFGNames;
     public static HashMap<String, Configuration> registry = new HashMap<String, Configuration>();
     public static boolean hasInit = false;
+    public static boolean readFromConfigs = true;
     public static ResourceLocation defaultVillagerTexture = new ResourceLocation(CustomVillagerModContainer.instance.modID(), "default.png");
 
     public static void preInit(FMLPreInitializationEvent event) {
@@ -37,6 +39,9 @@ public class CustomVillager {
         if (main.getBoolean("Debugger", Configuration.CATEGORY_GENERAL, false, "Setting this to true will add an Debugger item to the game.")){
             new DebugItem();
         }
+        main.save();
+        if (Loader.isModLoaded("MineTweaker3"))
+            readFromConfigs = main.getBoolean("Read config files", Configuration.CATEGORY_GENERAL, false, "Set this to true if you want to load the villager made with config files (false meant that it will ONLY disable if minetweaker is detected)");
         main.save();
 
         for (String name : VillageCFGNames){
@@ -51,6 +56,7 @@ public class CustomVillager {
 
     public static void serverStarting(FMLServerStartingEvent event) {
         if (!hasInit) {
+            if (readFromConfigs) //Don't feel like fixing indentations for this one if statement :P
             for (String name : registry.keySet()) {
                 Configuration configuration = registry.get(name);
                 int ID = configuration.getInt("ID", Configuration.CATEGORY_GENERAL, 9999, 0, 10000, null);

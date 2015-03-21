@@ -3,6 +3,7 @@ package elec332.customvillagers.minetweaker;
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import elec332.customvillagers.Data;
 import elec332.customvillagers.VillageTradeHandler;
+import elec332.customvillagers.VillagerTradeCleaner;
 import elec332.customvillagers.main.CustomVillager;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
@@ -17,12 +18,12 @@ import java.util.ArrayList;
 /**
  * Created by Elec332 on 9-3-2015.
  */
-@ZenClass("CustomVillagers")
+@ZenClass("elec332.CustomVillagers")
 public class CustomVillagers {
 
     @ZenMethod
     public static void registerVillager(int i){
-        registerVillager(i, null);
+        registerVillager(i, "default");
     }
 
     @ZenMethod
@@ -33,6 +34,16 @@ public class CustomVillagers {
     @ZenMethod
     public static void addTrade(int ID, IItemStack input1, IItemStack input2, IItemStack output){
         tryToApply(new addTrade(input1, input2, output, ID) , "You attempted to register the villager trades for villager ID "+ID+" too late, try restarting your game.");
+    }
+
+    @ZenMethod
+    public static void addTrade(int ID, IItemStack input1, IItemStack output){
+        tryToApply(new addTrade(null, input1, output, ID) , "You attempted to register the villager trades for villager ID "+ID+" too late, try restarting your game.");
+    }
+
+    @ZenMethod
+    public static void clearTrades(int ID){
+        tryToApply(new clearVillagerTrades(ID), "");
     }
 
     private static class addTrade extends IrreversibleAction{
@@ -51,8 +62,29 @@ public class CustomVillagers {
         ArrayList<MerchantRecipe> arrayList = new ArrayList<MerchantRecipe>();
         @Override
         public void apply() {
-            arrayList.add(new MerchantRecipe(MineTweakerMC.getItemStack(input1), MineTweakerMC.getItemStack(input2), MineTweakerMC.getItemStack(output)));
+            if (input1 != null)
+                arrayList.add(new MerchantRecipe(MineTweakerMC.getItemStack(input1), MineTweakerMC.getItemStack(input2), MineTweakerMC.getItemStack(output)));
+            else
+                arrayList.add(new MerchantRecipe(MineTweakerMC.getItemStack(input2), MineTweakerMC.getItemStack(output)));
             VillagerRegistry.instance().registerVillageTradeHandler(ID, new VillageTradeHandler(ID, arrayList));
+        }
+
+        @Override
+        public String describe() {
+            return null;
+        }
+    }
+
+    private static class clearVillagerTrades extends IrreversibleAction{
+
+        public clearVillagerTrades(int i){
+            this.ID = i;
+        }
+
+        private int ID;
+        @Override
+        public void apply() {
+            VillagerRegistry.instance().registerVillageTradeHandler(ID, new VillagerTradeCleaner(ID));
         }
 
         @Override

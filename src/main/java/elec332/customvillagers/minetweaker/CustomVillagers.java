@@ -4,7 +4,9 @@ import cpw.mods.fml.common.registry.VillagerRegistry;
 import elec332.customvillagers.Data;
 import elec332.customvillagers.VillageTradeHandler;
 import elec332.customvillagers.VillagerTradeCleaner;
+import elec332.customvillagers.VillagerTransformer;
 import elec332.customvillagers.main.CustomVillager;
+import elec332.customvillagers.main.CustomVillagerModContainer;
 import minetweaker.IUndoableAction;
 import minetweaker.MineTweakerAPI;
 import minetweaker.api.item.IItemStack;
@@ -44,6 +46,36 @@ public class CustomVillagers {
     @ZenMethod
     public static void clearTrades(int ID){
         tryToApply(new clearVillagerTrades(ID), "");
+    }
+
+    @ZenMethod
+    public static void addSpawnData(int toreplace, int chance, int ID){
+        Float f = (chance/100F);
+        tryToApply(new addSpawnData(toreplace, f, ID), "ERROR adding spawndata for villager ID "+ID);
+        CustomVillagerModContainer.instance.info("Im gonna have a "+f+" chance to replace villager ID "+toreplace+" with a villager with ID "+ID);
+    }
+
+    private static class addSpawnData extends IrreversibleAction{
+        public addSpawnData(int i, Float f, int i2){
+            this.i = i;
+            this.f = f;
+            this.i2 = i2;
+        }
+
+        int i;
+        Float f;
+        int i2;
+
+
+        @Override
+        public void apply() {
+            Data.spawnData.add(new VillagerTransformer(i, i2, f));
+        }
+
+        @Override
+        public String describe() {
+            return "Adding spawn data for villager ID: "+i;
+        }
     }
 
     private static class addTrade extends IrreversibleAction{

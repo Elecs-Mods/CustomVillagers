@@ -37,7 +37,7 @@ public class Data {
         }
     }
 
-    public static  void registerTexture(String png, int ID){
+    public static void registerTexture(String png, int ID){
         if (png.contains(".png") && !textureData.keySet().contains(ID)) {
             Data.textureData.put(ID, new ResourceLocation("textures", png));
         } else if (textureData.keySet().contains(ID)){

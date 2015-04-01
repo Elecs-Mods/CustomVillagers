@@ -9,7 +9,7 @@ import net.minecraftforge.event.entity.EntityJoinWorldEvent;
  */
 public class VillagerTransformer {
 
-    public VillagerTransformer(int ID, int customProfession,Float chance){
+    public VillagerTransformer(int ID, int customProfession, Float chance){
         this.ID = ID;
         this.profession = customProfession;
         this.chance = chance;

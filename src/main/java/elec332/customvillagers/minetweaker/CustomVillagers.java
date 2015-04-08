@@ -166,7 +166,6 @@ public class CustomVillagers {
 
         @Override
         public void undo() {
-
         }
 
         @Override

@@ -12,15 +12,15 @@ import elec332.core.helper.FileHelper;
 import elec332.core.helper.MCModInfo;
 import elec332.core.helper.ModInfoHelper;
 import elec332.core.modBaseUtils.ModBase;
-import elec332.core.modBaseUtils.modInfo;
+import elec332.core.modBaseUtils.ModInfo;
 import elec332.customvillagers.minetweaker.CustomVillagers;
 import elec332.customvillagers.proxies.CommonProxy;
 import minetweaker.MineTweakerAPI;
 
 import java.io.File;
 
-@Mod(modid = "CustomVillagers", name = "CustomVillagers", dependencies = modInfo.DEPENDENCIES+"@[#ELECCORE_VER#,)",
-acceptedMinecraftVersions = modInfo.ACCEPTEDMCVERSIONS, useMetadata = true, canBeDeactivated = true)
+@Mod(modid = "CustomVillagers", name = "CustomVillagers", dependencies = ModInfo.DEPENDENCIES+"@[#ELECCORE_VER#,)",
+acceptedMinecraftVersions = ModInfo.ACCEPTEDMCVERSIONS, useMetadata = true, canBeDeactivated = true)
 public class CustomVillagerModContainer extends ModBase{
 
 

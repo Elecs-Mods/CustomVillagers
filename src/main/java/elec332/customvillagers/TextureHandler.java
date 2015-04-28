@@ -19,7 +19,7 @@ import java.util.Set;
  */
 public class TextureHandler implements IResourcePack {
 
-    String path = "config/Elec's mods/"+ CustomVillagerModContainer.instance.modID();
+    String path = "config/Elec's Mods/"+ CustomVillagerModContainer.instance.modID();
 
     @Override
     public InputStream getInputStream(ResourceLocation rl) throws IOException {

@@ -52,7 +52,8 @@ public class CustomVillagers {
     public static void addSpawnData(int toreplace, int chance, int ID){
         Float f = (chance/100F);
         tryToApply(new addSpawnData(toreplace, f, ID), "ERROR adding spawndata for villager ID "+ID);
-        CustomVillagerModContainer.instance.info("Im gonna have a "+f+" chance to replace villager ID "+toreplace+" with a villager with ID "+ID);
+        if (canApply())
+            CustomVillagerModContainer.instance.info("Im gonna have a "+f+" chance to replace villager ID "+toreplace+" with a villager with ID "+ID);
     }
 
     private static class addSpawnData extends IrreversibleAction{
@@ -150,7 +151,7 @@ public class CustomVillagers {
         if (canApply())
             MineTweakerAPI.apply(action);
         else
-            MineTweakerAPI.logError(s);
+            CustomVillagerModContainer.instance.info("CustomVillagers properties weren't reloaded, this is not a bug, restart your client to refresh."); //MineTweakerAPI.logError(s);
     }
 
     private static boolean canApply (){

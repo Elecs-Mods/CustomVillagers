@@ -29,6 +29,7 @@ public class CustomVillager {
     public static HashMap<String, Configuration> registry = new HashMap<String, Configuration>();
     public static boolean hasInit = false;
     public static boolean readFromConfigs = true;
+    public static boolean annoyingChatSpam = true;
     public static ResourceLocation defaultVillagerTexture = new ResourceLocation(CustomVillagerModContainer.instance.modID(), "default.png");
 
     public static void preInit(FMLPreInitializationEvent event) {
@@ -39,6 +40,7 @@ public class CustomVillager {
         if (main.getBoolean("Debugger", Configuration.CATEGORY_GENERAL, false, "Setting this to true will add an Debugger item to the game.")){
             new DebugItem();
         }
+        annoyingChatSpam = main.getBoolean("annoyingChatSpam", Configuration.CATEGORY_GENERAL, true, "When set to false, this mod will stop sending chat messages every time you try to reload your minetweaker scripts");
         main.save();
         if (Loader.isModLoaded("MineTweaker3"))
             readFromConfigs = main.getBoolean("Read config files", Configuration.CATEGORY_GENERAL, false, "Set this to true if you want to load the villager made with config files (false meant that it will ONLY disable if minetweaker is detected)");

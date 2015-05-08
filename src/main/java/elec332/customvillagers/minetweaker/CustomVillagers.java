@@ -159,7 +159,8 @@ public class CustomVillagers {
 
     private static void sendMSG(){
         CustomVillagerModContainer.instance.info("CustomVillagers properties weren't reloaded, this is not a bug, restart your client to refresh.");
-        ElecCore.proxy.addPersonalMessageToPlayer("CustomVillagers properties weren't reloaded, this is not a bug, restart your client to refresh.");
+        if (CustomVillager.annoyingChatSpam)
+            ElecCore.proxy.addPersonalMessageToPlayer("CustomVillagers properties weren't reloaded, this is not a bug, restart your client to refresh.");
     }
 
     private abstract static class IrreversibleAction implements IUndoableAction{

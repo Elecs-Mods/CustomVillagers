@@ -1,6 +1,7 @@
 package elec332.customvillagers.minetweaker;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import elec332.core.main.ElecCore;
 import elec332.customvillagers.Data;
 import elec332.customvillagers.VillageTradeHandler;
 import elec332.customvillagers.VillagerTradeCleaner;
@@ -30,28 +31,28 @@ public class CustomVillagers {
 
     @ZenMethod
     public static void registerVillager(int i, String s){
-        tryToApply(new registerVillager(i, s), "You attempted to register an villager too late, try restarting your game, skipping trying to register villager for ID: "+i);
+        apply(new registerVillager(i, s));
     }
 
     @ZenMethod
     public static void addTrade(int ID, IItemStack input1, IItemStack input2, IItemStack output){
-        tryToApply(new addTrade(input1, input2, output, ID) , "You attempted to register the villager trades for villager ID "+ID+" too late, try restarting your game.");
+        apply(new addTrade(input1, input2, output, ID));
     }
 
     @ZenMethod
     public static void addTrade(int ID, IItemStack input1, IItemStack output){
-        tryToApply(new addTrade(null, input1, output, ID) , "You attempted to register the villager trades for villager ID "+ID+" too late, try restarting your game.");
+        apply(new addTrade(null, input1, output, ID));
     }
 
     @ZenMethod
     public static void clearTrades(int ID){
-        tryToApply(new clearVillagerTrades(ID), "");
+        apply(new clearVillagerTrades(ID));
     }
 
     @ZenMethod
     public static void addSpawnData(int toreplace, int chance, int ID){
         Float f = (chance/100F);
-        tryToApply(new addSpawnData(toreplace, f, ID), "ERROR adding spawndata for villager ID "+ID);
+        apply(new addSpawnData(toreplace, f, ID));
         if (canApply())
             CustomVillagerModContainer.instance.info("Im gonna have a "+f+" chance to replace villager ID "+toreplace+" with a villager with ID "+ID);
     }
@@ -69,7 +70,7 @@ public class CustomVillagers {
 
 
         @Override
-        public void apply() {
+        public void applyOnce() {
             Data.spawnData.add(new VillagerTransformer(i, i2, f));
         }
 
@@ -94,7 +95,7 @@ public class CustomVillagers {
         IItemStack output;
         ArrayList<MerchantRecipe> arrayList = new ArrayList<MerchantRecipe>();
         @Override
-        public void apply() {
+        public void applyOnce() {
             if (input1 != null)
                 arrayList.add(new MerchantRecipe(MineTweakerMC.getItemStack(input1), MineTweakerMC.getItemStack(input2), MineTweakerMC.getItemStack(output)));
             else
@@ -115,8 +116,9 @@ public class CustomVillagers {
         }
 
         private int ID;
+
         @Override
-        public void apply() {
+        public void applyOnce() {
             VillagerRegistry.instance().registerVillageTradeHandler(ID, new VillagerTradeCleaner(ID));
         }
 
@@ -137,7 +139,7 @@ public class CustomVillagers {
         String texture;
 
         @Override
-        public void apply() {
+        public void applyOnce() {
             Data.registerTexture(texture, ID);
         }
 
@@ -147,22 +149,36 @@ public class CustomVillagers {
         }
     }
 
-    private static void tryToApply(IUndoableAction action, String s){
-        if (canApply())
-            MineTweakerAPI.apply(action);
-        else
-            CustomVillagerModContainer.instance.info("CustomVillagers properties weren't reloaded, this is not a bug, restart your client to refresh."); //MineTweakerAPI.logError(s);
+    private static void apply(IUndoableAction action){
+        MineTweakerAPI.apply(action);
     }
 
     private static boolean canApply (){
         return !CustomVillager.hasInit;
     }
 
+    private static void sendMSG(){
+        CustomVillagerModContainer.instance.info("CustomVillagers properties weren't reloaded, this is not a bug, restart your client to refresh.");
+        ElecCore.proxy.addPersonalMessageToPlayer("CustomVillagers properties weren't reloaded, this is not a bug, restart your client to refresh.");
+    }
+
     private abstract static class IrreversibleAction implements IUndoableAction{
+
+        private boolean init = false;
+
+        public abstract void applyOnce();
+
+        @Override
+        public void apply() {
+            if (!init && canApply()){
+                applyOnce();
+                this.init = false;
+            } else  sendMSG();
+        }
 
         @Override
         public boolean canUndo() {
-            return false;
+            return true;
         }
 
         @Override

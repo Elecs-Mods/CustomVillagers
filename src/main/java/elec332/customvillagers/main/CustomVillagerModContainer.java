@@ -1,5 +1,6 @@
 package elec332.customvillagers.main;
 
+import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -8,16 +9,23 @@ import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
 import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.network.NetworkRegistry;
 import elec332.core.helper.FileHelper;
 import elec332.core.helper.MCModInfo;
 import elec332.core.helper.ModInfoHelper;
 import elec332.core.modBaseUtils.ModBase;
 import elec332.core.modBaseUtils.ModInfo;
+import elec332.core.player.PlayerHelper;
 import elec332.customvillagers.minetweaker.CustomVillagers;
 import elec332.customvillagers.proxies.CommonProxy;
 import minetweaker.MineTweakerAPI;
+import net.minecraft.command.CommandBase;
+import net.minecraft.command.ICommand;
+import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.player.EntityPlayer;
 
 import java.io.File;
+import java.util.List;
 
 @Mod(modid = "CustomVillagers", name = "CustomVillagers", dependencies = ModInfo.DEPENDENCIES+"@[#ELECCORE_VER#,)",
 acceptedMinecraftVersions = ModInfo.ACCEPTEDMCVERSIONS, useMetadata = true, canBeDeactivated = true)
@@ -48,7 +56,7 @@ public class CustomVillagerModContainer extends ModBase{
 	
 	@EventHandler
     public void init(FMLInitializationEvent event) {
-
+		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 		proxy.registerResourcePacks();
 		notifyEvent(event);
     }
@@ -63,6 +71,28 @@ public class CustomVillagerModContainer extends ModBase{
 	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
 		CustomVillager.serverStarting(event);
+		event.registerServerCommand(new CommandBase() {
+			@Override
+			public String getCommandName() {
+				return "CustomVillagersGui";
+			}
+
+			@Override
+			public boolean canCommandSenderUseCommand(ICommandSender commandSender) {
+				return commandSender instanceof EntityPlayer && PlayerHelper.isPlayerInCreative((EntityPlayer) commandSender);
+			}
+
+			@Override
+			public String getCommandUsage(ICommandSender commandSender) {
+				return "What's this?";
+			}
+
+			@Override
+			public void processCommand(ICommandSender commandSender, String[] string) {
+				if (commandSender instanceof EntityPlayer)
+					((EntityPlayer) commandSender).openGui(instance, Integer.parseInt(string[0]), commandSender.getEntityWorld(), 0, 0, 0);
+			}
+		});
 	}
 
 	public static String getDeclaredFieldDefaultResourcePacks(){

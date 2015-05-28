@@ -1,13 +1,16 @@
 package elec332.customvillagers.proxies;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
+import elec332.customvillagers.guistuff.ClientGuiVillager;
 import elec332.customvillagers.main.CustomVillagerModContainer;
 import elec332.customvillagers.TextureHandler;
 import net.minecraft.client.Minecraft;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.Container;
 import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.World;
 
 import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -32,5 +35,10 @@ public class ClientProxy extends CommonProxy {
         //for (int i : data.keySet()) {
             VillagerRegistry.instance().registerVillagerSkin(i, resourceLocation);//new ResourceLocation("textures", data.get(i)));
         //}
+    }
+
+    @Override
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
+        return new ClientGuiVillager((Container) getServerGuiElement(ID, player, world, x, y, z));
     }
 }

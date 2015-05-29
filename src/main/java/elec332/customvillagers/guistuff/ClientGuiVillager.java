@@ -49,7 +49,7 @@ public class ClientGuiVillager extends GuiContainer {
     }
 
     private void writeRecipe() throws IOException{
-        File file = MineTweakerHelper.getMTFile("Villager_"+container.ID, VillagerRegistry.getRegisteredVillagers().contains(container.ID) || container.ID < 7 ? "/--File for an already existing villager--\\" : "elec332.CustomVillagers.registerVillager("+container.ID+");");
+        File file = MineTweakerHelper.getMTFile("Villager_"+container.ID, VillagerRegistry.getRegisteredVillagers().contains(container.ID) || container.ID < 7 ? "//--File for an already existing villager--\\" : "elec332.CustomVillagers.registerVillager("+container.ID+");");
         List<String> stringList = FileUtils.readLines(file);
         stringList.add(MineTweakerHelper.newStringBuilder().append("elec332.CustomVillagers.addTrade(")
                         .append(container.ID).append(", ")

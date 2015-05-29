@@ -11,6 +11,7 @@ import org.lwjgl.opengl.GL11;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Created by Elec332 on 28-5-2015.
@@ -48,14 +49,15 @@ public class ClientGuiVillager extends GuiContainer {
 
     private void writeRecipe() throws IOException{
         File file = MineTweakerHelper.getMTFile("Villager_"+container.ID, "///", "elec332.CustomVillagers.registerVillager("+container.ID+");", "///");
-        FileUtils.write(file,
-                MineTweakerHelper.newStringBuilder().append("elec332.CustomVillagers.addTrade(")
+        List<String> stringList = FileUtils.readLines(file);
+        stringList.add(MineTweakerHelper.newStringBuilder().append("elec332.CustomVillagers.addTrade(")
                         .append(container.ID).append(", ")
                         .append(itemStackString(0)).append(", ")
                         .append(itemStackString(1)).append(", ")
                         .append(itemStackString(2))
                         .append(");").toString()
         );
+        FileUtils.writeLines(file, stringList);
     }
 
     private String itemStackString(int ID){

@@ -15,6 +15,8 @@ import net.minecraft.village.MerchantRecipe;
 import net.minecraftforge.common.config.Configuration;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,7 +32,7 @@ public class CustomVillager {
     public static boolean hasInit = false;
     public static boolean readFromConfigs = true;
     public static boolean annoyingChatSpam = true;
-    public static ResourceLocation defaultVillagerTexture = new ResourceLocation(CustomVillagerModContainer.instance.modID(), "default.png");
+    public static ResourceLocation defaultVillagerTexture = new ResourceLocation("textures/entity/villager/villager.png");//new ResourceLocation(CustomVillagerModContainer.instance.modID(), "default.png");
 
     public static void preInit(FMLPreInitializationEvent event) {
         baseFile = FileHelper.getCustomConfigFolderElec(event, ModInfoHelper.getModID(event));
@@ -100,5 +102,23 @@ public class CustomVillager {
 
             }*/
         }
+    }
+
+    public static File getMTFile(String fileName, String... fileComments){
+        File ret = new File("scripts/Elec332/scripts", fileName+".zs");
+        if (!ret.getParentFile().exists())
+            ret.getParentFile().mkdirs();
+        if (!ret.exists()){
+            try {
+                ret.createNewFile();
+                PrintWriter writer = new PrintWriter(ret);
+                for (String s : fileComments)
+                    writer.println(s);
+                writer.close();
+            } catch (IOException e){
+                throw new RuntimeException("IOException while attempting to create a new MT file", e);
+            }
+        }
+        return ret;
     }
 }

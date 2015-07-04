@@ -1,7 +1,7 @@
 package elec332.customvillagers.proxies;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
-import elec332.customvillagers.guistuff.ClientGuiVillager;
+import elec332.customvillagers.gui.ClientGuiVillager;
 import elec332.customvillagers.main.CustomVillagerModContainer;
 import elec332.customvillagers.TextureHandler;
 import net.minecraft.client.Minecraft;

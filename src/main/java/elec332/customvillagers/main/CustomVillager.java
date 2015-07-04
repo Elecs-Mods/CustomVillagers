@@ -9,6 +9,7 @@ import elec332.core.helper.ModInfoHelper;
 import elec332.customvillagers.Data;
 import elec332.customvillagers.DebugItem;
 import elec332.customvillagers.VillagerTransformer;
+import elec332.customvillagers.registry.VillagerRegistry;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.village.MerchantRecipe;
@@ -90,6 +91,7 @@ public class CustomVillager {
                 Data.tradeData.put(ID, trades);
                 Data.spawnData.add(new VillagerTransformer(toreplace, ID, chance));
             }
+            VillagerRegistry.instance.init();
             Data.registerVillagers();
             hasInit = true;
             //MinecraftForge.EVENT_BUS.register(new CustomVillager());

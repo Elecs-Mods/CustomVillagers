@@ -5,7 +5,7 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.village.MerchantRecipe;
 import net.minecraft.village.MerchantRecipeList;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 /**
@@ -13,14 +13,14 @@ import java.util.Random;
  */
 public class VillageTradeHandler implements VillagerRegistry.IVillageTradeHandler {
 
-    public VillageTradeHandler(int ID, ArrayList<MerchantRecipe> array){
+    public VillageTradeHandler(int ID, List<MerchantRecipe> array){
         super();
         this.ID = ID;
         this.trades = array;
     }
 
     int ID;
-    ArrayList<MerchantRecipe> trades;
+    List<MerchantRecipe> trades;
 
     @Override
     public void manipulateTradesForVillager(EntityVillager villager, MerchantRecipeList recipeList, Random random) {

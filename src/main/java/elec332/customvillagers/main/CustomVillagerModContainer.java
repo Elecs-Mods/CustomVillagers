@@ -1,6 +1,5 @@
 package elec332.customvillagers.main;
 
-import com.google.common.collect.Lists;
 import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
@@ -15,17 +14,18 @@ import elec332.core.helper.MCModInfo;
 import elec332.core.helper.ModInfoHelper;
 import elec332.core.modBaseUtils.ModBase;
 import elec332.core.modBaseUtils.ModInfo;
+import elec332.core.network.NetworkHandler;
 import elec332.core.player.PlayerHelper;
 import elec332.customvillagers.minetweaker.CustomVillagers;
+import elec332.customvillagers.network.PacketSyncTradeContents;
 import elec332.customvillagers.proxies.CommonProxy;
 import minetweaker.MineTweakerAPI;
 import net.minecraft.command.CommandBase;
-import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.player.EntityPlayer;
 
 import java.io.File;
-import java.util.List;
+import java.io.IOException;
 
 @Mod(modid = "CustomVillagers", name = "CustomVillagers", dependencies = ModInfo.DEPENDENCIES+"@[#ELECCORE_VER#,)",
 acceptedMinecraftVersions = ModInfo.ACCEPTEDMCVERSIONS, useMetadata = true, canBeDeactivated = true)
@@ -37,9 +37,10 @@ public class CustomVillagerModContainer extends ModBase{
 
 	@Mod.Instance("CustomVillagers")
 	public static CustomVillagerModContainer instance;
+	public static NetworkHandler networkHandler;
 
 	@EventHandler
-	public void preInit(FMLPreInitializationEvent event) {
+	public void preInit(FMLPreInitializationEvent event){
 		this.modID = ModInfoHelper.getModID(event);
 		this.cfg = FileHelper.getCustomConfigFileElec(event, ModInfoHelper.getModID(event), ModInfoHelper.getModID(event));
 		loadConfiguration();
@@ -58,6 +59,8 @@ public class CustomVillagerModContainer extends ModBase{
     public void init(FMLInitializationEvent event) {
 		NetworkRegistry.INSTANCE.registerGuiHandler(instance, proxy);
 		proxy.registerResourcePacks();
+		networkHandler = new NetworkHandler(modID);
+		networkHandler.registerServerPacket(PacketSyncTradeContents.class);
 		notifyEvent(event);
     }
 

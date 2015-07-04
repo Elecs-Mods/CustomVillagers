@@ -1,12 +1,10 @@
 package elec332.customvillagers.proxies;
 
 import cpw.mods.fml.common.network.IGuiHandler;
-import elec332.customvillagers.guistuff.ContainerVillagerGUI;
+import elec332.customvillagers.gui.ContainerVillagerGUI;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
-
-import java.util.HashMap;
 
 /**
  * Created by Elec332 on 12-2-2015.

@@ -17,7 +17,7 @@ import java.util.*;
  */
 public class Data {
     private static HashMap<Integer, ResourceLocation> textureData = new HashMap<Integer, ResourceLocation>();
-    public static HashMap<Integer, ArrayList<MerchantRecipe>> tradeData = new HashMap<Integer, ArrayList<MerchantRecipe>>();
+    public static HashMap<Integer, List<MerchantRecipe>> tradeData = new HashMap<Integer, List<MerchantRecipe>>();
     public static ArrayList<VillagerTransformer> spawnData = new ArrayList<VillagerTransformer>();
     private static boolean crash = false;
     private static int duplicateID;

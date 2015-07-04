@@ -131,6 +131,7 @@ public class CustomVillagers {
     private static class registerVillager extends IrreversibleAction{
 
         public registerVillager(int ID, String s){
+            System.out.println("[CustomVillagers-ERROR] This modpack is using outdated methods to create villagers, please report this to the modpack-author!");
             this.ID = ID;
             this.texture = s;
         }

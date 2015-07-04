@@ -1,4 +1,4 @@
-package elec332.customvillagers.guistuff;
+package elec332.customvillagers.gui;
 
 import elec332.core.util.BasicInventory;
 import net.minecraft.entity.player.EntityPlayer;
@@ -62,7 +62,7 @@ public class ContainerVillagerGUI extends Container{
         return stack1;
     }
 
-    protected BasicInventory inventory;
+    public BasicInventory inventory;
     protected int ID;
 
     @Override

@@ -1,6 +1,6 @@
 package elec332.customvillagers.gui;
 
-import elec332.customvillagers.json.VillagerData;
+import elec332.customvillagers.VillagerData;
 import elec332.customvillagers.main.CustomVillagerModContainer;
 import elec332.customvillagers.network.PacketSyncTradeContents;
 import elec332.customvillagers.registry.VillagerRegistry;
@@ -12,8 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.opengl.GL11;
 
-import java.io.IOException;
-
 /**
  * Created by Elec332 on 28-5-2015.
  */
@@ -22,10 +20,12 @@ public class ClientGuiVillager extends GuiContainer {
         super(container);
         this.container = (ContainerVillagerGUI) container;
         this.villagerData = VillagerRegistry.instance.getData(this.container.ID);
-        if (villagerData != null)
-            setTrade(villagerData.trades[0]);
+        shouldAdd = true;
+        if (villagerData != null && villagerData.trades.size() > 0){
+            setTrade(villagerData.trades.get(0));
+            shouldAdd = false;
+        }
         index = 0;
-        shouldAdd = false;
     }
 
     private ContainerVillagerGUI container;
@@ -59,9 +59,9 @@ public class ClientGuiVillager extends GuiContainer {
                     shouldAdd = false;
                 }
             } else {
-                villagerData.trades[index].setInput1(getStackInSlot(0));
-                villagerData.trades[index].setInput2(getStackInSlot(1));
-                villagerData.trades[index].setOutput(getStackInSlot(2));
+                villagerData.trades.get(index).setInput1(getStackInSlot(0));
+                villagerData.trades.get(index).setInput2(getStackInSlot(1));
+                villagerData.trades.get(index).setOutput(getStackInSlot(2));
             }
         } else if (nope == button1){
             index++;
@@ -73,13 +73,13 @@ public class ClientGuiVillager extends GuiContainer {
         if (stuffChanged && villagerData != null){
             if (index < 0)
                 index = 0;
-            if (index > villagerData.trades.length)
-                index = villagerData.trades.length;
-            if (index == villagerData.trades.length) {
+            if (index > villagerData.trades.size())
+                index = villagerData.trades.size();
+            if (index == villagerData.trades.size()) {
                 setTrade(null);
                 shouldAdd = true;
             } else {
-                setTrade(villagerData.trades[index]);
+                setTrade(villagerData.trades.get(index));
                 shouldAdd = false;
             }
         }
@@ -88,7 +88,7 @@ public class ClientGuiVillager extends GuiContainer {
     public void updateScreen() {
         super.updateScreen();
         if (villagerData != null) {
-            this.button1.enabled = this.index < villagerData.trades.length;
+            this.button1.enabled = this.index < villagerData.trades.size();
             this.button2.enabled = this.index > 0;
         }
     }
@@ -127,6 +127,7 @@ public class ClientGuiVillager extends GuiContainer {
     }
 
     private class ArrowButton extends GuiButton{
+
         private final boolean arrow;
 
         public ArrowButton(int i1, int i2, int i3, boolean arrow) {
@@ -153,6 +154,7 @@ public class ClientGuiVillager extends GuiContainer {
                 this.drawTexturedModalRect(this.xPosition, this.yPosition, l, k, this.width, this.height);
             }
         }
+
     }
 
 }

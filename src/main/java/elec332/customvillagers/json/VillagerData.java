@@ -1,4 +1,4 @@
-package elec332.customvillagers;
+package elec332.customvillagers.json;
 
 import com.google.common.collect.Lists;
 import net.minecraft.item.ItemStack;
@@ -60,14 +60,6 @@ public class VillagerData implements Serializable {
 
     public void addTrade(Trade trade){
         trades.add(trade);
-        /*if (trade == null)
-            throw new IllegalArgumentException();
-        Trade[] copy = trades.clone();
-        trades = new Trade[copy.length+1];
-        for (int i = 0; i < copy.length; i++) {
-            trades[i] = copy[i];
-        }
-        trades[copy.length] = trade;*/
     }
 
     @Override

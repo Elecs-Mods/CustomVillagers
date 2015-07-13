@@ -1,9 +1,9 @@
 package elec332.customvillagers.gui;
 
-import elec332.customvillagers.VillagerData;
-import elec332.customvillagers.main.CustomVillagerModContainer;
+import elec332.customvillagers.json.VillagerData;
+import elec332.customvillagers.CustomVillagers;
 import elec332.customvillagers.network.PacketSyncTradeContents;
-import elec332.customvillagers.registry.VillagerRegistry;
+import elec332.customvillagers.registry.CustomVillagerRegistry;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.inventory.GuiContainer;
@@ -19,7 +19,7 @@ public class ClientGuiVillager extends GuiContainer {
     public ClientGuiVillager(Container container) {
         super(container);
         this.container = (ContainerVillagerGUI) container;
-        this.villagerData = VillagerRegistry.instance.getData(this.container.ID);
+        this.villagerData = CustomVillagerRegistry.instance.getData(this.container.ID);
         shouldAdd = true;
         if (villagerData != null && villagerData.trades.size() > 0){
             setTrade(villagerData.trades.get(0));
@@ -95,16 +95,16 @@ public class ClientGuiVillager extends GuiContainer {
 
     private void setTrade(VillagerData.Trade trade){
         if (trade != null) {
-            CustomVillagerModContainer.networkHandler.getNetworkWrapper().sendToServer(new PacketSyncTradeContents(trade.getInput1(), trade.getInput2(), trade.getOutput()));
+            CustomVillagers.networkHandler.getNetworkWrapper().sendToServer(new PacketSyncTradeContents(trade.getInput1(), trade.getInput2(), trade.getOutput()));
         } else {
-            CustomVillagerModContainer.networkHandler.getNetworkWrapper().sendToServer(new PacketSyncTradeContents());
+            CustomVillagers.networkHandler.getNetworkWrapper().sendToServer(new PacketSyncTradeContents());
         }
     }
 
     @Override
     public void onGuiClosed() {
         super.onGuiClosed();
-        elec332.customvillagers.registry.VillagerRegistry.instance.rewriteFiles();
+        CustomVillagerRegistry.instance.rewriteFiles();
     }
 
     private ItemStack getStackInSlot(int i){

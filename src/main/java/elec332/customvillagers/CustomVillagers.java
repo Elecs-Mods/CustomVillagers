@@ -1,14 +1,11 @@
-package elec332.customvillagers.main;
+package elec332.customvillagers;
 
-import cpw.mods.fml.common.Loader;
 import cpw.mods.fml.common.Mod;
 import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.SidedProxy;
-import cpw.mods.fml.common.event.FMLInitializationEvent;
-import cpw.mods.fml.common.event.FMLPostInitializationEvent;
-import cpw.mods.fml.common.event.FMLPreInitializationEvent;
-import cpw.mods.fml.common.event.FMLServerStartingEvent;
+import cpw.mods.fml.common.event.*;
 import cpw.mods.fml.common.network.NetworkRegistry;
+import cpw.mods.fml.common.registry.EntityRegistry;
 import elec332.core.helper.FileHelper;
 import elec332.core.helper.MCModInfo;
 import elec332.core.helper.ModInfoHelper;
@@ -16,37 +13,43 @@ import elec332.core.modBaseUtils.ModBase;
 import elec332.core.modBaseUtils.ModInfo;
 import elec332.core.network.NetworkHandler;
 import elec332.core.player.PlayerHelper;
-import elec332.customvillagers.minetweaker.CustomVillagers;
+import elec332.customvillagers.entity.EntityCustomVillager;
 import elec332.customvillagers.network.PacketSyncTradeContents;
 import elec332.customvillagers.proxies.CommonProxy;
-import minetweaker.MineTweakerAPI;
+import elec332.customvillagers.registry.CustomVillagerRegistry;
 import net.minecraft.command.CommandBase;
 import net.minecraft.command.ICommandSender;
+import net.minecraft.entity.EntityList;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.util.ResourceLocation;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.Random;
 
 @Mod(modid = "CustomVillagers", name = "CustomVillagers", dependencies = ModInfo.DEPENDENCIES+"@[#ELECCORE_VER#,)",
 acceptedMinecraftVersions = ModInfo.ACCEPTEDMCVERSIONS, useMetadata = true, canBeDeactivated = true)
-public class CustomVillagerModContainer extends ModBase{
+public class CustomVillagers extends ModBase{
 
 
 	@SidedProxy(clientSide = "elec332.customvillagers.proxies.ClientProxy", serverSide = "elec332.customvillagers.proxies.CommonProxy")
 	public static CommonProxy proxy;
 
 	@Mod.Instance("CustomVillagers")
-	public static CustomVillagerModContainer instance;
+	public static CustomVillagers instance;
 	public static NetworkHandler networkHandler;
+	public static File baseFile;
+	public static ResourceLocation defaultVillagerTexture = new ResourceLocation("textures/entity/villager/villager.png");
+	public static Random random;
 
 	@EventHandler
 	public void preInit(FMLPreInitializationEvent event){
+		baseFile = FileHelper.getCustomConfigFolderElec(event, ModInfoHelper.getModID(event));
 		this.modID = ModInfoHelper.getModID(event);
-		this.cfg = FileHelper.getCustomConfigFileElec(event, ModInfoHelper.getModID(event), ModInfoHelper.getModID(event));
+		this.cfg = new File(baseFile, modID());
+		random = new Random();
 		loadConfiguration();
-		CustomVillager.preInit(event);
-		if (Loader.isModLoaded("MineTweaker3"))
-			MineTweakerAPI.registerClass(CustomVillagers.class);
+		if (developmentEnvironment)
+			new DebugItem();
 
 		MCModInfo.CreateMCModInfo(event, "Created by Elec332",
 				"This mod allows you to create custom villagers with config files",
@@ -67,13 +70,17 @@ public class CustomVillagerModContainer extends ModBase{
 	@EventHandler
 	public void postInit(FMLPostInitializationEvent event){
 		loadConfiguration();
-
+		EntityList.addMapping(EntityCustomVillager.class, "EntityCustomVillager", EntityRegistry.findGlobalUniqueEntityId());
 		notifyEvent(event);
 	}
 
 	@EventHandler
+	public void loadComplete(FMLLoadCompleteEvent event){
+		CustomVillagerRegistry.instance.init();
+	}
+
+	@EventHandler
 	public void serverStarting(FMLServerStartingEvent event) {
-		CustomVillager.serverStarting(event);
 		event.registerServerCommand(new CommandBase() {
 			@Override
 			public String getCommandName() {

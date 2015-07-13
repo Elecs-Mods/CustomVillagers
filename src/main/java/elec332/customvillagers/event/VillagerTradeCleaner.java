@@ -1,4 +1,4 @@
-package elec332.customvillagers;
+package elec332.customvillagers.event;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import net.minecraft.entity.passive.EntityVillager;

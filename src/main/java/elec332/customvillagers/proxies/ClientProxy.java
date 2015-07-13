@@ -2,8 +2,8 @@ package elec332.customvillagers.proxies;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
 import elec332.customvillagers.gui.ClientGuiVillager;
-import elec332.customvillagers.main.CustomVillagerModContainer;
-import elec332.customvillagers.TextureHandler;
+import elec332.customvillagers.CustomVillagers;
+import elec332.customvillagers.client.TextureHandler;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -21,7 +21,7 @@ public class ClientProxy extends CommonProxy {
     @SuppressWarnings("unchecked")
     public void registerResourcePacks() {
         try {
-            Field f = Minecraft.class.getDeclaredField(CustomVillagerModContainer.getDeclaredFieldDefaultResourcePacks());
+            Field f = Minecraft.class.getDeclaredField(CustomVillagers.getDeclaredFieldDefaultResourcePacks());
             f.setAccessible(true);
             List list = (List) f.get(Minecraft.getMinecraft());
             list.add(new TextureHandler());
@@ -31,10 +31,8 @@ public class ClientProxy extends CommonProxy {
     }
 
     @Override
-    public void registerVillagerSkins(int i, ResourceLocation resourceLocation) {
-        //for (int i : data.keySet()) {
-            VillagerRegistry.instance().registerVillagerSkin(i, resourceLocation);//new ResourceLocation("textures", data.get(i)));
-        //}
+    public void registerVillagerSkin(int i, ResourceLocation resourceLocation) {
+        VillagerRegistry.instance().registerVillagerSkin(i, resourceLocation);
     }
 
     @Override

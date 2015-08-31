@@ -1,9 +1,10 @@
 package elec332.customvillagers.proxies;
 
 import cpw.mods.fml.common.registry.VillagerRegistry;
-import elec332.customvillagers.gui.ClientGuiVillager;
+import elec332.core.inventory.BaseContainer;
 import elec332.customvillagers.CustomVillagers;
 import elec332.customvillagers.client.TextureHandler;
+import elec332.customvillagers.gui.ClientGuiVillager;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.Container;
@@ -37,6 +38,6 @@ public class ClientProxy extends CommonProxy {
 
     @Override
     public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-        return new ClientGuiVillager((Container) getServerGuiElement(ID, player, world, x, y, z));
+        return new ClientGuiVillager((BaseContainer) getServerGuiElement(ID, player, world, x, y, z));
     }
 }

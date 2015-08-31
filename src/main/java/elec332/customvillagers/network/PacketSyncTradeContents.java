@@ -4,6 +4,7 @@ import cpw.mods.fml.common.network.simpleimpl.IMessage;
 import cpw.mods.fml.common.network.simpleimpl.MessageContext;
 import elec332.core.network.AbstractPacket;
 import elec332.customvillagers.gui.ContainerVillagerGUI;
+import elec332.customvillagers.json.VillagerData;
 import net.minecraft.inventory.Container;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
@@ -17,14 +18,17 @@ public class PacketSyncTradeContents extends AbstractPacket {
         networkPackageObject = new NBTTagCompound();
     }
 
-    public PacketSyncTradeContents(ItemStack s1, ItemStack s2, ItemStack o){
+    public PacketSyncTradeContents(VillagerData.Trade trade){
         NBTTagCompound tagCompound = new NBTTagCompound();
-        if (s1 != null)
-            tagCompound.setTag("s1", s1.writeToNBT(new NBTTagCompound()));
-        if (s2 != null)
-            tagCompound.setTag("s2", s2.writeToNBT(new NBTTagCompound()));
-        if (o != null)
-            tagCompound.setTag("o", o.writeToNBT(new NBTTagCompound()));
+        ItemStack s1 = trade.input1 == null ? null : trade.input1.toPacketStack();
+        ItemStack s2 = trade.input2 == null ? null : trade.input2.toPacketStack();
+        ItemStack o = trade.output == null ? null : trade.output.toPacketStack();
+            if (s1 != null)
+                tagCompound.setTag("s1", s1.writeToNBT(new NBTTagCompound()));
+            if (s2 != null)
+                tagCompound.setTag("s2", s2.writeToNBT(new NBTTagCompound()));
+            if (o != null)
+                tagCompound.setTag("o", o.writeToNBT(new NBTTagCompound()));
         networkPackageObject = tagCompound;
     }
 

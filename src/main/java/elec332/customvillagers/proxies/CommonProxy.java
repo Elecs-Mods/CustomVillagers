@@ -1,6 +1,5 @@
 package elec332.customvillagers.proxies;
 
-import cpw.mods.fml.common.network.FMLNetworkEvent;
 import cpw.mods.fml.common.network.IGuiHandler;
 import elec332.customvillagers.gui.ContainerVillagerGUI;
 import net.minecraft.entity.player.EntityPlayer;

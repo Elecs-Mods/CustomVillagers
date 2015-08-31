@@ -219,13 +219,13 @@ public class ContainerVillagerGUI extends BaseContainer implements WidgetAlgorit
                 slot(3, false);
                 activateButtons(true);
                 type.setActive(false);
-                return;
+                /*return;
             case RANDOM_BLACKSMITH_WEAPONRY:
                 slot(1, false);
                 slot(2, false);
                 slot(3, false);
                 activateButtons(true);
-                type.setActive(false);
+                type.setActive(false);*/
         }
     }
 

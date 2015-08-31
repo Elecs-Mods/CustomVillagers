@@ -23,13 +23,11 @@ public class VillagerTransformer {
             event.setCanceled(true);
             NBTTagCompound tag = new NBTTagCompound();
             event.entity.writeToNBT(tag);
+            int profession = ((EntityVillager)event.entity).getProfession();
             event.world.removeEntity(event.entity);
             EntityCustomVillager entityCustomVillager = new EntityCustomVillager(event.world);
             entityCustomVillager.readFromNBT(tag);
-            /*entityCustomVillager.tasks.taskEntries.clear();
-            for (Object obj : ((EntityVillager) event.entity).tasks.taskEntries){
-                entityCustomVillager.tasks.addTask(((EntityAITasks.EntityAITaskEntry) obj).priority, ((EntityAITasks.EntityAITaskEntry) obj).action);
-            }*/
+            entityCustomVillager.setProfession(profession);
             entityCustomVillager.onTransformed();
             event.world.spawnEntityInWorld(entityCustomVillager);
         }

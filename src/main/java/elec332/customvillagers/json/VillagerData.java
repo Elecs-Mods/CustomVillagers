@@ -82,8 +82,8 @@ public class VillagerData implements Serializable {
                         return new MerchantRecipe(new ItemStack(Items.book), payment, itemstack);
                     case ADD_RANDOM_ENCHANTMENT:
                         return new MerchantRecipe(input1.toStack(TradeSlot.INPUT), input2.toStack(TradeSlot.INPUT), EnchantmentHelper.addRandomEnchantment(CustomVillagers.random, input1.toStack(TradeSlot.INPUT), 5 + CustomVillagers.random.nextInt(15)));
-                    case RANDOM_BLACKSMITH_WEAPONRY:
-                        break;
+                    /*case RANDOM_BLACKSMITH_WEAPONRY:
+                        break;*/
                     default:
                         break;
                 }
@@ -164,7 +164,7 @@ public class VillagerData implements Serializable {
     }
 
     public enum SpecialType{
-        NORMAL, RANDOM_ENCHANTED_BOOK, ADD_RANDOM_ENCHANTMENT, RANDOM_BLACKSMITH_WEAPONRY
+        NORMAL, RANDOM_ENCHANTED_BOOK, ADD_RANDOM_ENCHANTMENT      //, RANDOM_BLACKSMITH_WEAPONRY
     }
 
     public Trade newRandomEnchantedBookTrade(ItemStack payment){

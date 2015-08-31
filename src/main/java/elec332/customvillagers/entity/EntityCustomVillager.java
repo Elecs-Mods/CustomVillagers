@@ -2,6 +2,7 @@ package elec332.customvillagers.entity;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import elec332.customvillagers.json.Algorithm;
 import elec332.customvillagers.json.VillagerData;
 import elec332.customvillagers.registry.CustomVillagerRegistry;
 import elec332.customvillagers.util.CorrectedTuple;
@@ -46,7 +47,7 @@ public class EntityCustomVillager extends EntityVillager {
     private int wealth;                     //Interesting, this only gets updated, but it's never used
     private String lastBuyingPlayer;
     private boolean isLookingForHome;
-    private float field_82191_bN;           //Dafuq?
+    private float probabilityStuff;           //Dafuq?
 
 
     public EntityCustomVillager(World world) {
@@ -54,6 +55,7 @@ public class EntityCustomVillager extends EntityVillager {
     }
 
     public void onTransformed(){
+        setProfession(CustomVillagerRegistry.instance.getNewID(this));
     }
 
     @Override
@@ -257,7 +259,7 @@ public class EntityCustomVillager extends EntityVillager {
     }
 
     public float adjustProbability(float f) {
-        float f1 = f + this.field_82191_bN;
+        float f1 = f + this.probabilityStuff;
         return f1 > 0.9F ? 0.9F - (f1 - 0.9F) : f1;
     }
 
@@ -268,20 +270,19 @@ public class EntityCustomVillager extends EntityVillager {
     @SuppressWarnings("unchecked")
     private void addDefaultEquipmentAndRecipies(int p_70950_1_) {
         if (this.buyingList != null) {
-            this.field_82191_bN = MathHelper.sqrt_float((float) this.buyingList.size()) * 0.2F;
+            this.probabilityStuff = MathHelper.sqrt_float((float) this.buyingList.size()) * 0.2F;
         } else {
-            this.field_82191_bN = 0.0F;
+            this.probabilityStuff = 0.0F;
         }
         VillagerData data = CustomVillagerRegistry.instance.getData(getProfession());
 
-        MerchantRecipeList merchantrecipelist;
-        merchantrecipelist = new MerchantRecipeList();
+        MerchantRecipeList merchantrecipelist = new MerchantRecipeList();
         //TODO: VillagerRegistry.manageVillagerTrades(merchantrecipelist, this, this.getProfession(), this.rand);
 
         merchantrecipelist.addAll(data.getTrades(this));
 
         if (merchantrecipelist.isEmpty()) {
-            func_146091_a(merchantrecipelist, Items.gold_ingot, this.rand, 1.0F);
+            merchantrecipelist.add(new MerchantRecipe(new ItemStack(Items.gold_ingot, Algorithm.calculateFromTuple(fromVillagerSellingList(Items.gold_ingot))), Items.emerald));
         }
 
         if (data.shuffle)
@@ -301,55 +302,6 @@ public class EntityCustomVillager extends EntityVillager {
     public void setRecipes(MerchantRecipeList trades) {
     }
 
-    //TODO
-    public static void func_146091_a(MerchantRecipeList p_146091_0_, Item p_146091_1_, Random p_146091_2_, float p_146091_3_) {
-        if (p_146091_2_.nextFloat() < p_146091_3_) {
-            p_146091_0_.add(new MerchantRecipe(func_146088_a(p_146091_1_, p_146091_2_), Items.emerald));
-        }
-    }
-
-    //TODO
-    private static ItemStack func_146088_a(Item p_146088_0_, Random p_146088_1_) {
-        return new ItemStack(p_146088_0_, func_146092_b(p_146088_0_, p_146088_1_), 0);
-    }
-
-    //TODO
-    private static int func_146092_b(Item item, Random random) {
-        CorrectedTuple<Integer, Integer> tuple = fromVillagerSellingList(item);
-        return tuple == null ? 1 : (tuple.getFirst() >= tuple.getSecond() ? tuple.getFirst() : tuple.getFirst() + random.nextInt(tuple.getSecond()) - tuple.getFirst());
-    }
-
-    //TODO
-    public static void func_146089_b(MerchantRecipeList p_146089_0_, Item p_146089_1_, Random p_146089_2_, float p_146089_3_) {
-        if (p_146089_2_.nextFloat() < p_146089_3_) {
-            int i = func_146090_c(p_146089_1_, p_146089_2_);
-            ItemStack itemstack;
-            ItemStack itemstack1;
-
-            if (i < 0) {
-                itemstack = new ItemStack(Items.emerald, 1, 0);
-                itemstack1 = new ItemStack(p_146089_1_, -i, 0);
-            } else {
-                itemstack = new ItemStack(Items.emerald, i, 0);
-                itemstack1 = new ItemStack(p_146089_1_, 1, 0);
-            }
-
-            p_146089_0_.add(new MerchantRecipe(itemstack, itemstack1));
-        }
-    }
-
-    //TODO
-    private static int func_146090_c(Item p_146090_0_, Random p_146090_1_) {
-        Tuple tuple = (Tuple) blacksmithSellingList.get(p_146090_0_);
-        return tuple == null ? 1 : (((Integer) tuple.getFirst()).intValue() >= ((Integer) tuple.getSecond()).intValue() ? ((Integer) tuple.getFirst()).intValue() : ((Integer) tuple.getFirst()).intValue() + p_146090_1_.nextInt(((Integer) tuple.getSecond()).intValue() - ((Integer) tuple.getFirst()).intValue()));
-    }
-
-
-
-///////////////////
-
-
-
     public static CorrectedTuple<Integer, Integer> fromVillagerSellingList(Item item){
         Tuple tuple = (Tuple)villagersSellingList.get(item);
         if (tuple != null)
@@ -363,7 +315,6 @@ public class EntityCustomVillager extends EntityVillager {
             return CorrectedTuple.fromTuple(tuple);
         return null;
     }
-///////////////////
 
     @SideOnly(Side.CLIENT)
     @Override

@@ -7,6 +7,7 @@ import elec332.core.json.JsonHandler;
 import elec332.core.util.EventHelper;
 import elec332.customvillagers.CustomVillagers;
 import elec332.customvillagers.DuplicateVillagerIDException;
+import elec332.customvillagers.entity.EntityCustomVillager;
 import elec332.customvillagers.event.VillagerTransformer;
 import elec332.customvillagers.json.VillagerData;
 import net.minecraft.util.ResourceLocation;
@@ -75,34 +76,26 @@ public class CustomVillagerRegistry {
                 e.printStackTrace();
             }
         }
-            for (VillagerData data : dataList) {
-                if (!(data.ID >=0) && isVillagerRegistered(data.ID))
-                    throw new DuplicateVillagerIDException(data.ID);
-                registeredIDs.add(data.ID);
-                registerTexture(data.textureName, data.ID);
-                VillagerRegistry.instance().registerVillagerId(data.ID);
-                registry.put(data.ID, data);
-                /*List<MerchantRecipe> toAdd = Lists.newArrayList();
-                for (VillagerData.Trade trade : data.trades) {
-                    ItemStack s1 = trade.getInput1();
-                    ItemStack s2 = trade.getInput2();
-                    ItemStack o = trade.getOutput();
-                    if (o == null) {
-                        throw new RuntimeException("Invalid output on trade for villager: " + data.ID);
-                    } else if (s1 == null && s2 == null) {
-                        throw new RuntimeException("Both trade inputs are null, this is impossible! Villager ID: " + data.ID);
-                    } else if (s1 != null && s2 != null) {
-                        toAdd.add(new MerchantRecipe(s1, s2, o));
-                    } else if (s1 != null) {
-                        toAdd.add(new MerchantRecipe(s1, o));
-                    } else {
-                        toAdd.add(new MerchantRecipe(s2, o));
-                    }
-                }
-                VillagerRegistry.instance().registerVillageTradeHandler(data.ID, new VillageTradeHandler(data.ID, toAdd));
-                //EventHelper.registerHandlerForge(new VillagerTransformer(data.villagerToOverride, data.ID, data.spawnChance));*/
-            }
+        for (VillagerData data : dataList) {
+            if (!(data.ID >= 0) && isVillagerRegistered(data.ID))
+                throw new DuplicateVillagerIDException(data.ID);
+            registeredIDs.add(data.ID);
+            registerTexture(data.textureName, data.ID);
+            VillagerRegistry.instance().registerVillagerId(data.ID);
+            registry.put(data.ID, data);
+        }
+    }
 
+    public int getNewID(EntityCustomVillager villager){
+        for (VillagerData data : registry.values()){
+            if (data.ID < 5){
+                break;
+            }
+            if (CustomVillagers.random.nextFloat() < data.spawnChance){
+                return data.ID;
+            }
+        }
+        return villager.getProfession();
     }
 
     private void registerTexture(String png, int ID){

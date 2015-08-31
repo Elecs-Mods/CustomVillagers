@@ -214,8 +214,8 @@ public class ClientGuiVillager extends BaseGuiContainer implements WidgetButton.
                 return s1 != null && s2 == null && o == null;
             case ADD_RANDOM_ENCHANTMENT:
                 return s1 != null && s2 != null && o == null;
-            case RANDOM_BLACKSMITH_WEAPONRY:
-                return false;
+            /*case RANDOM_BLACKSMITH_WEAPONRY:
+                return false;*/
             default:
                 return false;
         }
